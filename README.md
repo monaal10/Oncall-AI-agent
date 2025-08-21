@@ -10,7 +10,7 @@ OnCall AI Agent is an **open-source, modular AI-powered system** that helps DevO
 
 - **Analyzing logs** from multiple cloud providers (AWS, GCP, Azure) or local files
 - **Reading metrics and alarms** from monitoring systems
-- **Understanding your codebase** through GitHub/GitLab integration or local repositories
+- **Understanding your codebase** through GitHub integration or local repositories
 - **Leveraging runbooks** from various sources (PDF, Markdown, Confluence, Notion)
 - **Suggesting specific fixes** with exact code changes and resolution steps
 - **Learning from incidents** to improve future responses
@@ -27,6 +27,9 @@ OnCall AI Agent is an **open-source, modular AI-powered system** that helps DevO
 |----------|--------|
 | **OpenAI** | Planned |
 | **Anthropic** | Planned |
+| **Azure OpenAI** | Planned |
+| **Google Gemini** | Planned |
+| **AWS Bedrock** | Planned |
 | **Ollama** | Planned |
 | **HuggingFace** | Planned |
 
@@ -35,7 +38,7 @@ OnCall AI Agent is an **open-source, modular AI-powered system** that helps DevO
 |----------|-----------|---------|
 | **Logs** | AWS CloudWatch, GCP Logging, Azure Monitor, Local Files | Planned, Planned, Planned, Planned |
 | **Metrics** | AWS CloudWatch, GCP Monitoring, Azure Monitor | Planned, Planned, Planned |
-| **Code** | GitHub, GitLab, Bitbucket, Local Repository | Planned, Planned, Planned, Planned |
+| **Code** | GitHub, Local Repository | Planned, Planned |
 | **Runbooks** | PDF, Markdown, Confluence, Notion | Planned, Planned, Planned, Planned |
 
 ### **Multiple Interfaces**
@@ -235,7 +238,7 @@ graph TB
     E --> L[GCP Monitoring]
     
     F --> M[GitHub]
-    F --> N[GitLab]
+    F --> N[Local Repository]
     
     G --> O[Confluence]
     G --> P[PDF/Markdown]
@@ -263,20 +266,23 @@ See [SECURITY.md](SECURITY.md) for security policy and reporting vulnerabilities
 
 ### Phase 1 - Core Foundation (Current)
 - [x] Project structure and architecture design
-- [ ] Basic architecture and plugin system
-- [ ] AWS CloudWatch integration
-- [ ] GitHub integration  
-- [ ] OpenAI/Anthropic LLM support
+- [x] Abstract base classes and plugin system
+- [x] AWS CloudWatch integration (logs and metrics)
+- [x] Azure Monitor integration (logs and metrics)
+- [x] GCP Cloud integration (logging and monitoring)
+- [x] GitHub integration (repository and code analysis)
+- [x] Runbook integration (PDF, Markdown, DOCX, Web)
+- [x] LLM provider implementations (OpenAI, Anthropic, Ollama via LangChain)
 - [ ] CLI and API interfaces
-- [ ] Basic runbook support (Markdown/PDF)
+- [ ] Core AI agent and resolution engine (LangGraph workflows)
 
 ### Phase 2 - Expansion
-- [ ] GCP and Azure integrations
-- [ ] GitLab and Bitbucket support
-- [ ] Ollama and local model support
+- [ ] Additional code repository support (Bitbucket, local Git)
+- [ ] Additional local model support
 - [ ] Advanced runbook integrations (Confluence, Notion)
 - [ ] Plugin marketplace
 - [ ] Incident learning and feedback loops
+- [ ] Local file and directory monitoring
 
 ### Phase 3 - Advanced Features  
 - [ ] Multi-tenant support

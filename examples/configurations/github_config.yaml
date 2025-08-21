@@ -1,0 +1,61 @@
+# GitHub Integration Configuration
+# Example configuration for connecting to GitHub repositories
+
+integrations:
+  # GitHub Code Repository Provider
+  code_provider:
+    type: "github"
+    config:
+      # Required: GitHub personal access token
+      token: "${GITHUB_TOKEN}"
+      
+      # Required: List of repositories to access (format: "owner/repo")
+      repositories:
+        - "myorg/backend-service"
+        - "myorg/frontend-app"
+        - "myorg/shared-libraries"
+        - "myorg/infrastructure"
+      
+      # Optional: GitHub API base URL (for GitHub Enterprise)
+      # base_url: "https://api.github.com"  # Default for GitHub.com
+      # base_url: "https://github.mycompany.com/api/v3"  # Example for GitHub Enterprise
+
+# Example usage patterns:
+#
+# 1. Creating a Personal Access Token:
+#    - Go to GitHub Settings > Developer settings > Personal access tokens
+#    - Generate new token (classic) with these scopes:
+#      - repo (for private repositories)
+#      - public_repo (for public repositories only)
+#      - read:org (if accessing organization repositories)
+#    - Set as environment variable: export GITHUB_TOKEN="your_token_here"
+#
+# 2. Repository Access:
+#    - Token must have access to all specified repositories
+#    - For organization repositories, token owner must be a member
+#    - For private repositories, token needs 'repo' scope
+#    - For public repositories, 'public_repo' scope is sufficient
+#
+# 3. GitHub Enterprise:
+#    - Set base_url to your GitHub Enterprise API endpoint
+#    - Token must be created on your GitHub Enterprise instance
+#    - Ensure network connectivity to your GitHub Enterprise server
+
+# Repository naming conventions:
+# - Use full repository names: "owner/repository-name"
+# - Examples:
+#   - Personal repos: "username/my-project"
+#   - Organization repos: "company/backend-api"
+#   - Forked repos: "username/original-project" (your fork)
+
+# Token permissions needed:
+# - repo: Full control of private repositories
+# - public_repo: Access to public repositories
+# - read:org: Read org and team membership (for org repos)
+# - read:user: Read user profile data
+# - user:email: Access user email addresses
+
+# Rate limiting:
+# - GitHub API has rate limits: 5000 requests/hour for authenticated requests
+# - Search API has lower limits: 30 requests/minute
+# - The integration handles rate limiting automatically with retries

@@ -1,0 +1,71 @@
+# AWS CloudWatch Integration Configuration
+# Example configuration for connecting to AWS CloudWatch Logs and Metrics
+
+integrations:
+  # CloudWatch Logs Provider
+  log_provider:
+    type: "aws_cloudwatch"
+    config:
+      # Required: AWS region
+      region: "us-west-2"
+      
+      # Optional: Explicit credentials (if not using default AWS credentials)
+      # access_key_id: "${AWS_ACCESS_KEY_ID}"
+      # secret_access_key: "${AWS_SECRET_ACCESS_KEY}"
+      # session_token: "${AWS_SESSION_TOKEN}"
+      
+      # Optional: AWS profile name (alternative to explicit credentials)
+      # profile_name: "default"
+      
+      # Optional: Specific log groups to search (if not specified, searches all available)
+      log_groups:
+        - "/aws/lambda/my-function"
+        - "/aws/apigateway/my-api"
+        - "/aws/ecs/my-service"
+        - "application-logs"
+      
+  # CloudWatch Metrics Provider  
+  metrics_provider:
+    type: "aws_cloudwatch"
+    config:
+      # Required: AWS region
+      region: "us-west-2"
+      
+      # Optional: Explicit credentials (if not using default AWS credentials)
+      # access_key_id: "${AWS_ACCESS_KEY_ID}"
+      # secret_access_key: "${AWS_SECRET_ACCESS_KEY}"
+      # session_token: "${AWS_SESSION_TOKEN}"
+      
+      # Optional: AWS profile name
+      # profile_name: "default"
+      
+      # Optional: Specific namespaces to monitor
+      namespaces:
+        - "AWS/EC2"
+        - "AWS/RDS" 
+        - "AWS/Lambda"
+        - "AWS/ApplicationELB"
+        - "Custom/MyApp"
+
+# Example usage patterns:
+#
+# 1. Using default AWS credentials (recommended):
+#    - Configure AWS CLI: aws configure
+#    - Or use IAM roles for EC2/Lambda
+#    - Or set environment variables: AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
+#
+# 2. Using explicit credentials:
+#    - Set environment variables and reference them in config
+#    - Or use AWS profiles with profile_name
+#
+# 3. Using IAM roles (for EC2/ECS/Lambda):
+#    - No credentials needed in config
+#    - Ensure the role has necessary CloudWatch permissions:
+#      - logs:DescribeLogGroups
+#      - logs:FilterLogEvents
+#      - logs:StartQuery
+#      - logs:GetQueryResults
+#      - cloudwatch:DescribeAlarms
+#      - cloudwatch:GetMetricStatistics
+#      - cloudwatch:ListMetrics
+#      - cloudwatch:DescribeAlarmHistory

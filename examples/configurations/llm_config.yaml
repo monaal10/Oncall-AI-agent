@@ -1,0 +1,293 @@
+# LLM Provider Configuration
+# Example configurations for different LLM providers with LangChain integration
+
+# Option 1: OpenAI as primary provider
+integrations:
+  llm_provider:
+    type: "llm_manager"
+    config:
+      # Primary provider (used by default)
+      primary_provider:
+        type: "openai"
+        config:
+          api_key: "${OPENAI_API_KEY}"
+          model: "gpt-4"  # or "gpt-3.5-turbo", "gpt-4-turbo"
+          max_tokens: 2000
+          temperature: 0.1
+          timeout: 60
+          # Optional: for custom endpoints or proxies
+          # base_url: "https://api.openai.com/v1"
+          # organization: "${OPENAI_ORG_ID}"
+      
+      # Optional: fallback providers
+      fallback_providers:
+        - type: "anthropic"
+          config:
+            api_key: "${ANTHROPIC_API_KEY}"
+            model: "claude-3-sonnet-20240229"
+            max_tokens: 2000
+            temperature: 0.1
+        
+        - type: "ollama"
+          config:
+            model: "llama2"
+            base_url: "http://localhost:11434"
+            temperature: 0.1
+            timeout: 120
+
+---
+
+# Option 2: Anthropic as primary provider
+integrations:
+  llm_provider:
+    type: "llm_manager"
+    config:
+      primary_provider:
+        type: "anthropic"
+        config:
+          api_key: "${ANTHROPIC_API_KEY}"
+          model: "claude-3-sonnet-20240229"  # or "claude-3-opus-20240229", "claude-3-haiku-20240307"
+          max_tokens: 2000
+          temperature: 0.1
+          timeout: 60
+      
+      fallback_providers:
+        - type: "openai"
+          config:
+            api_key: "${OPENAI_API_KEY}"
+            model: "gpt-4"
+
+---
+
+# Option 3: Ollama (local) as primary provider
+integrations:
+  llm_provider:
+    type: "llm_manager"
+    config:
+      primary_provider:
+        type: "ollama"
+        config:
+          model: "llama2"  # or "codellama", "mistral", "neural-chat"
+          base_url: "http://localhost:11434"
+          temperature: 0.1
+          timeout: 120
+          use_chat_model: true
+      
+      # Cloud providers as fallback
+      fallback_providers:
+        - type: "openai"
+          config:
+            api_key: "${OPENAI_API_KEY}"
+            model: "gpt-3.5-turbo"  # Cheaper fallback
+
+---
+
+# Option 4: New LLM providers
+
+# Google Gemini as primary provider
+integrations:
+  llm_provider:
+    type: "llm_manager"
+    config:
+      primary_provider:
+        type: "gemini"
+        config:
+          api_key: "${GOOGLE_API_KEY}"
+          model_name: "gemini-pro"  # or "gemini-pro-vision", "gemini-1.5-pro"
+          max_tokens: 2000
+          temperature: 0.1
+          timeout: 60
+          # Optional: safety settings
+          safety_settings:
+            harassment: "block_medium_and_above"
+            hate_speech: "block_medium_and_above"
+
+# Azure OpenAI as primary provider
+integrations:
+  llm_provider:
+    type: "llm_manager"
+    config:
+      primary_provider:
+        type: "azure_openai"
+        config:
+          api_key: "${AZURE_OPENAI_API_KEY}"
+          azure_endpoint: "${AZURE_OPENAI_ENDPOINT}"  # e.g., "https://your-resource.openai.azure.com/"
+          deployment_name: "gpt-4-deployment"  # Your deployment name
+          api_version: "2024-02-15-preview"
+          max_tokens: 2000
+          temperature: 0.1
+
+# AWS Bedrock as primary provider
+integrations:
+  llm_provider:
+    type: "llm_manager"
+    config:
+      primary_provider:
+        type: "bedrock"
+        config:
+          model_id: "anthropic.claude-3-sonnet-20240229-v1:0"  # or other Bedrock model IDs
+          region: "us-east-1"
+          # Optional: explicit AWS credentials (if not using IAM roles)
+          # aws_access_key_id: "${AWS_ACCESS_KEY_ID}"
+          # aws_secret_access_key: "${AWS_SECRET_ACCESS_KEY}"
+          max_tokens: 2000
+          temperature: 0.1
+
+---
+
+# Option 5: Single provider configurations (no fallbacks)
+
+# OpenAI only
+integrations:
+  llm_provider:
+    type: "openai"
+    config:
+      api_key: "${OPENAI_API_KEY}"
+      model: "gpt-4"
+      max_tokens: 2000
+      temperature: 0.1
+
+# Anthropic only
+integrations:
+  llm_provider:
+    type: "anthropic"
+    config:
+      api_key: "${ANTHROPIC_API_KEY}"
+      model: "claude-3-sonnet-20240229"
+      max_tokens: 2000
+      temperature: 0.1
+
+# Ollama only
+integrations:
+  llm_provider:
+    type: "ollama"
+    config:
+      model_name: "llama2"
+      base_url: "http://localhost:11434"
+      temperature: 0.1
+
+# Gemini only
+integrations:
+  llm_provider:
+    type: "gemini"
+    config:
+      api_key: "${GOOGLE_API_KEY}"
+      model_name: "gemini-pro"
+      max_tokens: 2000
+      temperature: 0.1
+
+# Azure OpenAI only
+integrations:
+  llm_provider:
+    type: "azure_openai"
+    config:
+      api_key: "${AZURE_OPENAI_API_KEY}"
+      azure_endpoint: "${AZURE_OPENAI_ENDPOINT}"
+      deployment_name: "gpt-4-deployment"
+      api_version: "2024-02-15-preview"
+
+# Bedrock only
+integrations:
+  llm_provider:
+    type: "bedrock"
+    config:
+      model_id: "anthropic.claude-3-sonnet-20240229-v1:0"
+      region: "us-east-1"
+
+# HuggingFace only
+integrations:
+  llm_provider:
+    type: "huggingface"
+    config:
+      model_name: "microsoft/DialoGPT-medium"
+      device: "cpu"
+      max_tokens: 1000
+
+# Model recommendations by use case:
+#
+# Best overall performance:
+# - OpenAI GPT-4: Excellent reasoning, good code analysis
+# - Anthropic Claude-3 Opus: Superior reasoning, excellent for complex analysis
+# - Azure OpenAI GPT-4: Same as OpenAI but with Azure integration
+# - Gemini Pro: Strong reasoning, good for analysis
+#
+# Best value/performance:
+# - OpenAI GPT-3.5-turbo: Good performance, lower cost
+# - Anthropic Claude-3 Sonnet: Balanced performance and speed
+# - Gemini Pro: Competitive performance, good pricing
+# - Bedrock Claude models: Enterprise features, AWS integration
+#
+# Privacy/local deployment:
+# - Ollama with Llama2: Good general purpose, runs locally
+# - Ollama with CodeLlama: Better for code analysis, runs locally
+# - Ollama with Mistral: Fast and efficient, runs locally
+# - HuggingFace local models: Various options, runs locally
+#
+# Enterprise/compliance:
+# - Azure OpenAI: Enterprise features, compliance, data residency
+# - Bedrock: AWS enterprise features, compliance, model choice
+# - Ollama: Complete data control, air-gapped deployment
+#
+# Large context needs:
+# - Anthropic Claude models: 200K context window
+# - Bedrock Claude models: 200K context window
+# - Gemini 1.5 Pro: 1M context window (largest available)
+# - OpenAI GPT-4-turbo: 128K context window
+#
+# Vision capabilities:
+# - OpenAI GPT-4V: Image analysis
+# - Azure OpenAI GPT-4V: Image analysis with Azure
+# - Gemini Pro Vision: Image and video analysis
+# - Bedrock Claude-3: Image analysis
+#
+# Code-specific tasks:
+# - OpenAI GPT-4: Excellent code understanding
+# - Ollama CodeLlama: Specialized for code, runs locally
+
+# Environment variables needed:
+# export OPENAI_API_KEY="your-openai-api-key"
+# export ANTHROPIC_API_KEY="your-anthropic-api-key"
+# export GOOGLE_API_KEY="your-google-api-key"
+# export AZURE_OPENAI_API_KEY="your-azure-openai-key"
+# export AZURE_OPENAI_ENDPOINT="https://your-resource.openai.azure.com/"
+# export AWS_ACCESS_KEY_ID="your-aws-access-key"  # For Bedrock
+# export AWS_SECRET_ACCESS_KEY="your-aws-secret-key"  # For Bedrock
+
+# Setup instructions:
+#
+# Ollama (local models):
+# 1. Install Ollama: https://ollama.ai/
+# 2. Pull models: ollama pull llama2
+# 3. Start server: ollama serve (usually starts automatically)
+# 4. Verify: curl http://localhost:11434/api/tags
+#
+# Google Gemini:
+# 1. Go to Google AI Studio: https://makersuite.google.com/
+# 2. Create API key
+# 3. Set environment variable: export GOOGLE_API_KEY="your-key"
+#
+# Azure OpenAI:
+# 1. Create Azure OpenAI resource in Azure portal
+# 2. Deploy a model (e.g., GPT-4)
+# 3. Get endpoint and API key from Azure portal
+# 4. Set environment variables:
+#    export AZURE_OPENAI_API_KEY="your-key"
+#    export AZURE_OPENAI_ENDPOINT="https://your-resource.openai.azure.com/"
+#
+# AWS Bedrock:
+# 1. Enable Bedrock in AWS console
+# 2. Request access to desired models
+# 3. Configure AWS credentials (IAM role, access keys, or AWS CLI)
+# 4. Set region where Bedrock is available (us-east-1, us-west-2, etc.)
+#
+# HuggingFace:
+# 1. Many models work without API key
+# 2. For hosted inference: create account at https://huggingface.co/
+# 3. Generate API token if needed
+# 4. Install dependencies: pip install transformers torch
+
+# LangGraph integration notes:
+# - All providers return LangChain-compatible models
+# - Use manager.get_langchain_model() in LangGraph workflows
+# - Supports streaming for real-time responses
+# - Built-in retry and fallback logic

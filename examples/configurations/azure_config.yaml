@@ -1,0 +1,68 @@
+# Azure Monitor Integration Configuration
+# Example configuration for connecting to Azure Monitor Logs and Metrics
+
+integrations:
+  # Azure Monitor Logs Provider
+  log_provider:
+    type: "azure_monitor"
+    config:
+      # Required: Azure subscription ID
+      subscription_id: "${AZURE_SUBSCRIPTION_ID}"
+      
+      # Required: Log Analytics workspace ID
+      workspace_id: "${AZURE_WORKSPACE_ID}"
+      
+      # Optional: Service principal authentication (if not using default credentials)
+      # tenant_id: "${AZURE_TENANT_ID}"
+      # client_id: "${AZURE_CLIENT_ID}"
+      # client_secret: "${AZURE_CLIENT_SECRET}"
+      
+      # Optional: Specific tables to search (if not specified, searches common tables)
+      tables:
+        - "AzureActivity"
+        - "AppServiceConsoleLogs"
+        - "AppServiceHTTPLogs"
+        - "ContainerLog"
+        - "Syslog"
+        - "Event"
+        - "SecurityEvent"
+      
+  # Azure Monitor Metrics Provider  
+  metrics_provider:
+    type: "azure_monitor"
+    config:
+      # Required: Azure subscription ID
+      subscription_id: "${AZURE_SUBSCRIPTION_ID}"
+      
+      # Optional: Service principal authentication
+      # tenant_id: "${AZURE_TENANT_ID}"
+      # client_id: "${AZURE_CLIENT_ID}"
+      # client_secret: "${AZURE_CLIENT_SECRET}"
+      
+      # Optional: Specific resource groups to monitor
+      resource_groups:
+        - "production-rg"
+        - "staging-rg"
+
+# Example usage patterns:
+#
+# 1. Using default Azure credentials (recommended):
+#    - Azure CLI: az login
+#    - Managed Identity (for Azure VMs/App Services)
+#    - Environment variables: AZURE_CLIENT_ID, AZURE_CLIENT_SECRET, AZURE_TENANT_ID
+#
+# 2. Using service principal:
+#    - Create service principal: az ad sp create-for-rbac --name "oncall-agent"
+#    - Assign roles: "Log Analytics Reader", "Monitoring Reader"
+#    - Set environment variables and reference them in config
+#
+# 3. Required permissions:
+#    - Log Analytics Workspace: "Log Analytics Reader" role
+#    - Subscription/Resource Groups: "Monitoring Reader" role
+#    - For specific resources: "Reader" role on the resource
+
+# Sample resource URIs for metrics:
+# Virtual Machine: /subscriptions/{subscription-id}/resourceGroups/{resource-group}/providers/Microsoft.Compute/virtualMachines/{vm-name}
+# App Service: /subscriptions/{subscription-id}/resourceGroups/{resource-group}/providers/Microsoft.Web/sites/{app-name}
+# Storage Account: /subscriptions/{subscription-id}/resourceGroups/{resource-group}/providers/Microsoft.Storage/storageAccounts/{account-name}
+# SQL Database: /subscriptions/{subscription-id}/resourceGroups/{resource-group}/providers/Microsoft.Sql/servers/{server-name}/databases/{db-name}

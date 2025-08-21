@@ -1,0 +1,108 @@
+# Runbook Integration Configuration
+# Example configuration for multiple runbook sources
+
+integrations:
+  # Unified Runbook Provider (supports multiple types)
+  runbook_provider:
+    type: "unified"
+    config:
+      # Multiple provider configurations
+      providers:
+        
+        # PDF runbooks from local directory
+        pdf_runbooks:
+          type: "pdf"
+          config:
+            runbook_directory: "/path/to/pdf/runbooks"
+            recursive: true  # Search subdirectories
+            cache_enabled: true  # Cache extracted text
+        
+        # Markdown runbooks from local directory
+        markdown_runbooks:
+          type: "markdown"
+          config:
+            runbook_directory: "/path/to/markdown/runbooks"
+            recursive: true
+            file_extensions: [".md", ".markdown", ".txt"]
+            cache_enabled: true
+        
+        # Word document runbooks
+        docx_runbooks:
+          type: "docx"
+          config:
+            runbook_directory: "/path/to/docx/runbooks"
+            recursive: true
+            cache_enabled: true
+        
+        # Web-based runbooks (documentation sites)
+        web_runbooks:
+          type: "web_link"
+          config:
+            base_urls:
+              - "https://docs.mycompany.com/runbooks"
+              - "https://wiki.mycompany.com/operations"
+            timeout: 30
+            max_pages: 50  # Limit crawling
+            cache_ttl: 3600  # Cache for 1 hour
+            user_agent: "OnCall-AI-Agent/1.0"
+            headers:
+              Authorization: "Bearer ${DOCS_API_TOKEN}"  # If required
+
+# Alternative: Single provider type configurations
+# 
+# For PDF only:
+# runbook_provider:
+#   type: "pdf"
+#   config:
+#     runbook_directory: "/path/to/runbooks"
+#     recursive: true
+#
+# For Markdown only:
+# runbook_provider:
+#   type: "markdown"
+#   config:
+#     runbook_directory: "/path/to/runbooks"
+#     file_extensions: [".md", ".markdown"]
+#
+# For Web only:
+# runbook_provider:
+#   type: "web_link"
+#   config:
+#     base_urls: ["https://docs.example.com"]
+
+# Directory structure examples:
+#
+# /runbooks/
+# ├── infrastructure/
+# │   ├── database-issues.pdf
+# │   ├── network-troubleshooting.md
+# │   └── server-maintenance.docx
+# ├── applications/
+# │   ├── api-errors.md
+# │   ├── frontend-issues.pdf
+# │   └── deployment-guide.docx
+# └── incident-response/
+#     ├── escalation-procedures.pdf
+#     ├── communication-templates.md
+#     └── post-mortem-process.docx
+
+# Web runbook examples:
+# - Internal documentation sites
+# - Confluence spaces
+# - GitBook documentation
+# - Custom documentation portals
+# - Wiki systems
+
+# File naming conventions:
+# - Use descriptive names: "database-connection-issues.md"
+# - Include service names: "user-service-troubleshooting.pdf"
+# - Use categories: "network/dns-resolution-guide.docx"
+# - Version if needed: "deployment-guide-v2.md"
+
+# Content organization tips:
+# - Use clear headings and sections
+# - Include error messages and symptoms
+# - Provide step-by-step resolution procedures
+# - Add links to related resources
+# - Include code examples and commands
+# - Specify prerequisites and assumptions

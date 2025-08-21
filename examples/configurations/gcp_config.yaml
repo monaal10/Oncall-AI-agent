@@ -1,0 +1,62 @@
+# GCP Cloud Logging and Monitoring Integration Configuration
+# Example configuration for connecting to Google Cloud Logging and Monitoring
+
+integrations:
+  # GCP Cloud Logging Provider
+  log_provider:
+    type: "gcp_logging"
+    config:
+      # Required: GCP project ID
+      project_id: "${GCP_PROJECT_ID}"
+      
+      # Optional: Path to service account JSON file (if not using default credentials)
+      # credentials_path: "/path/to/service-account.json"
+      
+      # Optional: Specific log names to search (if not specified, searches common logs)
+      log_names:
+        - "cloudsql.googleapis.com%2Fmysql.err"
+        - "compute.googleapis.com%2Factivity_log"
+        - "container.googleapis.com%2Fcluster-autoscaler-visibility"
+        - "run.googleapis.com%2Frequests"
+        - "appengine.googleapis.com%2Frequest_log"
+        - "cloudfunctions.googleapis.com%2Fcloud-functions"
+      
+  # GCP Cloud Monitoring Provider  
+  metrics_provider:
+    type: "gcp_monitoring"
+    config:
+      # Required: GCP project ID
+      project_id: "${GCP_PROJECT_ID}"
+      
+      # Optional: Path to service account JSON file
+      # credentials_path: "/path/to/service-account.json"
+
+# Example usage patterns:
+#
+# 1. Using default GCP credentials (recommended):
+#    - gcloud CLI: gcloud auth application-default login
+#    - Service account on GCE/GKE/Cloud Run (automatic)
+#    - Environment variable: GOOGLE_APPLICATION_CREDENTIALS=/path/to/service-account.json
+#
+# 2. Using service account file:
+#    - Create service account: gcloud iam service-accounts create oncall-agent
+#    - Create key: gcloud iam service-accounts keys create key.json --iam-account=oncall-agent@PROJECT_ID.iam.gserviceaccount.com
+#    - Grant roles and set credentials_path in config
+#
+# 3. Required IAM roles:
+#    - "Logs Viewer" role for Cloud Logging access
+#    - "Monitoring Viewer" role for Cloud Monitoring access
+#    - "Project Viewer" role for basic project access
+#
+# Grant roles:
+# gcloud projects add-iam-policy-binding PROJECT_ID --member="serviceAccount:oncall-agent@PROJECT_ID.iam.gserviceaccount.com" --role="roles/logging.viewer"
+# gcloud projects add-iam-policy-binding PROJECT_ID --member="serviceAccount:oncall-agent@PROJECT_ID.iam.gserviceaccount.com" --role="roles/monitoring.viewer"
+
+# Common GCP metric types:
+# - compute.googleapis.com/instance/cpu/utilization (Compute Engine CPU)
+# - compute.googleapis.com/instance/disk/read_bytes_count (Compute Engine Disk)
+# - kubernetes.io/container/cpu/core_usage_time (GKE CPU)
+# - kubernetes.io/container/memory/used_bytes (GKE Memory)
+# - cloudfunctions.googleapis.com/function/execution_count (Cloud Functions)
+# - run.googleapis.com/container/cpu/utilizations (Cloud Run)
+# - appengine.googleapis.com/http/server/response_count (App Engine)
